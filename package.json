@@ -4,10 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "mocha -r chai/register-expect --recursive src"
+    "test": "mocha --recursive src"
   },
   "devDependencies": {
     "chai": "4.2.0",
     "mocha": "8.2.1"
+  },
+  "mocha": {
+    "require": [
+      "chai/register-expect"
+    ]
   }
 }
