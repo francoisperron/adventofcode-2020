@@ -1,7 +1,10 @@
-const validPasswordsUsingTimesPolicy = (entries) => entries
+const validPasswordsUsingTimesPolicy = (entries) => validPasswordsUsingPolicy(entries, timesPolicy)
+const validPasswordsUsingPositionPolicy = (entries) => validPasswordsUsingPolicy(entries, positionPolicy)
+
+const validPasswordsUsingPolicy = (entries, policy) => entries
   .map(e => parseEntry(e))
-  .map(e => timesPolicy(e))
-  .filter(valid => valid === true).length
+  .map(e => policy(e))
+  .filter(valid => valid).length
 
 const parseEntry = entry => {
   const [policy, password] = entry.split(': ')
@@ -15,17 +18,9 @@ const timesPolicy = ({ n1, n2, letter, password }) => {
   return n1 <= count && count <= n2
 }
 
-const validPasswordsUsingPositionPolicy = entries => entries
-  .map(e => parseEntry(e))
-  .map(e => positionPolicy(e))
-  .filter(valid => valid === true).length
-
-const positionPolicy = ({ n1, n2, letter, password }) => {
-  const positions = []
-  for (let i = 0; i < password.length; i++) {
-    if (password[i] === letter) positions.push(i + 1)
-  }
-  return positions.filter(p => p === n1 || p === n2).length === 1
-}
+const positionPolicy = ({ n1, n2, letter, password }) => password
+  .split('')
+  .filter((c, i) => c === letter && (i + 1 === n1 || i + 1 === n2))
+  .length === 1
 
 export { timesPolicy, validPasswordsUsingTimesPolicy, positionPolicy, validPasswordsUsingPositionPolicy }
