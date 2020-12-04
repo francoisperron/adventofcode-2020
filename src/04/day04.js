@@ -1,5 +1,5 @@
-const validPasswordsPart1 = batchFile => parseBatchFile(batchFile).map(p => arePassportFieldsValid(p)).filter(valid => valid).length
-const validPasswordsPart2 = batchFile => parseBatchFile(batchFile).map(p => arePassportValuesValid(p)).filter(valid => valid).length
+const validPasswordsPart1 = batchFile => parseBatchFile(batchFile).filter(p => arePassportFieldsValid(p)).length
+const validPasswordsPart2 = batchFile => parseBatchFile(batchFile).filter(p => arePassportValuesValid(p)).length
 
 const parseBatchFile = batchFile => batchFile.split('\n\n')
 
@@ -25,8 +25,7 @@ const arePassportValuesValid = passport => {
     || pidMatcher.test(part)
 
   return passport.split(/[ \n]/)
-    .map(part => matches(part))
-    .filter(valid => valid)
+    .filter(part => matches(part))
     .length === 7
 }
 
