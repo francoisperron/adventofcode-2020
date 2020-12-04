@@ -7,10 +7,8 @@ const validPasswordsUsingPolicy = (entries, policy) => entries
   .filter(valid => valid).length
 
 const parseEntry = entry => {
-  const [policy, password] = entry.split(': ')
-  const [numbers, letter] = policy.split(' ')
-  const [n1, n2] = numbers.split('-').map(c => parseInt(c))
-  return { n1, n2, letter, password }
+  const parts = entry.match(/(\d*)-(\d*) (.): (\w*)/)
+  return { n1: parseInt(parts[1]), n2: parseInt(parts[2]), letter: parts[3], password: parts[4] }
 }
 
 const timesPolicy = ({ n1, n2, letter, password }) => {
