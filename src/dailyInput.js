@@ -12,7 +12,7 @@ const dailyInput = async day => {
     const req = https.get(options, (res) => {
       let data = ''
       res.on('data', (chunk) => data += chunk)
-      res.on('end', () => resolve(data))
+      res.on('end', () => resolve(data.slice(0, -1)))
     })
 
     req.on('error', err => {

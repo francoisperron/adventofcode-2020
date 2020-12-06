@@ -1,7 +1,7 @@
 import { dailyInput } from './dailyInput.js'
 
 describe('The daily input', () => {
-  it('is retrieved for the given day', async () => {
+  it('is retrieved for the given day without the last \n', async () => {
     const result = await dailyInput(1)
     expect(result).to.equal(day1Input)
   })
@@ -207,4 +207,4 @@ const day1Input =
   '1898\n' +
   '1661\n' +
   '1806\n' +
-  '1851\n'
+  '1851'

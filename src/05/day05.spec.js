@@ -5,7 +5,7 @@ describe('Day 5: Binary Boarding', () => {
 
   let entries
   before('get input', async () => {
-    entries = (await dailyInputLines(5)).filter(l => l !== '')
+    entries = await dailyInputLines(5)
   })
 
   describe('Part 1: What is the highest seat ID on a boarding pass?', () => {
