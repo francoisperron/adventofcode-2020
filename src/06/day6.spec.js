@@ -36,7 +36,7 @@ describe('Day 6: Custom Customs', () => {
     })
 
     it('solves it for the example', () => {
-      const example = 'abc\n\na\nb\nc\n\nab\nac\n\na\na\na\na\n\nb'.split(('\n\n'))
+      const example = 'abc\n\na\nb\nc\n\nab\nac\n\na\na\na\na\n\nb'.split('\n\n')
       expect(example.reduce((sum, answers) => sum + countEveryoneAnswers(answers), 0)).to.equal(6)
     })
 
