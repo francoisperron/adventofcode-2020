@@ -1,38 +1,5 @@
 import { dailyInputLines } from '../dailyInput.js'
-
-const parseRules = rules => rules.map(r => parseRule(r)).reduce((rules, rule) => ({ ...rules, [rule.bag]: rule.containing }), {})
-
-const parseRule = rule => {
-  const [bag, containingString] = rule.split(/ bags contain /)
-  const containingMatches = containingString.split(/, /).map(c => c.match(/(\d+) (\w+ \w+) bag/))
-  const containing = containingMatches[0] === null ? [] : containingMatches.flatMap(parts => parts[2])
-  const count = containingMatches[0] === null ? 0 : containingMatches.flatMap(parts => parts[1])
-  return { bag, containing, count }
-}
-
-const parseRule2 = rule => {
-
-}
-
-const bagsContaining = (bag, rules) => {
-  const bags = parseRules(rules)
-  const allBags = Object.keys(bags).map(b => findBagsIncludedIn(bags[b], bags))
-
-  return allBags.filter(b => b.includes(bag)).length
-}
-
-const findBagsIncludedIn = (rule, rules) => rule.flatMap(r => r === 'shiny gold' ? r : rules[r] ? findBagsIncludedIn(rules[r], rules) : r).filter(unique)
-const unique = (value, index, array) => array.indexOf(value) === index
-
-const bagsIn = (bag, rules) => {
-  const bags = parseRules2(rules)
-  console.log('bags', bags)
-  console.log('bags[bag]', bags[bag])
-  // bags[bag].
-}
-
-const parseRules2 = rules => rules.map(r => parseRule(r)).reduce((rules, rule) => ({ ...rules, [rule.bag]: { bag: rule.containing, count: rule.count} }), {})
-
+import { bagsContaining, bagsIn, parseRules, parseRules2 } from './day7.js'
 
 describe('Day 7: Handy Haversacks', () => {
 
@@ -89,24 +56,6 @@ describe('Day 7: Handy Haversacks', () => {
       })
     })
 
-    it('replaces all bag rules until shiny gold is found', () => {
-      const bags = parseRules(example)
-
-      const allBags = Object.keys(bags).map(b => findBagsIncludedIn(bags[b], bags))
-      console.log('allBags', allBags)
-      expect(allBags).to.eql([
-        ['shiny gold'],
-        ['shiny gold'],
-        ['shiny gold'],
-        ['shiny gold'],
-        [],
-        [],
-        [],
-        [],
-        []
-      ])
-    })
-
     it('solves example', () => {
       expect(bagsContaining('shiny gold', example)).to.equal(4)
     })
@@ -117,12 +66,18 @@ describe('Day 7: Handy Haversacks', () => {
   })
 
   describe('Part 2: How many individual bags are required inside your single shiny gold bag?', () => {
-    it('flatten rule', () => {
-      const rule = 'dark orange bags contain 2 bright white bags, 1 muted yellow bags.'
-      expect(parseRule2(rule)).to.eql({'dark orange' : ['bright white', 'bright white', 'yellow']})
+    it('flattens rule', () => {
+      const rule = ['dark orange bags contain 2 bright white bags, 1 muted yellow bags.']
+      expect(parseRules2(rule)).to.eql({'dark orange' : ['bright white', 'bright white', 'muted yellow']})
     })
     it('solves for example', () => {
-      expect(bagsIn('shiny gold', example)).to.equal(32)
+      const rules = parseRules2(example)
+      expect(bagsIn('shiny gold', rules).length).to.equal(32)
+    })
+
+    it('solves it', () => {
+      const rules = parseRules2(entries)
+      expect(bagsIn('shiny gold', rules).length).to.equal(1469)
     })
   })
 })
