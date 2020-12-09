@@ -1,31 +1,23 @@
-const beforeInfiniteLoop = instructions => {
-  const visited = []
-  let index = 0
-  let acc = 0
+const beforeInfiniteLoop = instructions => runInfiniteLoop(0, 0, [], instructions)
 
-  while (!visited.includes(index) && index < instructions.length) {
-    visited.push(index)
-    const result = run(instructions[index], acc, index)
-    acc = result.acc
-    index = result.index
-  }
-  return { acc, index }
+const runInfiniteLoop = (acc, index, visited, instructions) => {
+  if (visited.includes(index) || index === instructions.length) return { acc, index }
+
+  visited.push(index)
+  const result = run(instructions[index], acc, index)
+
+  return runInfiniteLoop(result.acc, result.index, visited, instructions)
 }
 
-const accumulatorInTheEnd = instructions => {
-  const programEnd = instructions.length
-  let index = 0
-  let acc = 0
+const accumulatorInTheEnd = instructions => runModifiedInstructions(0, 0, 0, instructions)
 
-  let modifiedInstructionIndex = 0
+const runModifiedInstructions = (acc, index, modifiedInstructionIndex, instructions) => {
+  if (index === instructions.length) return acc
 
-  while (programEnd !== index) {
-    const modifiedInstructions = modifyInstructionAt(instructions, modifiedInstructionIndex++)
-    const loop = beforeInfiniteLoop(modifiedInstructions)
-    index = loop.index
-    acc = loop.acc
-  }
-  return acc
+  const modifiedInstructions = modifyInstructionAt(instructions, modifiedInstructionIndex)
+  const result = beforeInfiniteLoop(modifiedInstructions)
+
+  return runModifiedInstructions(result.acc, result.index, ++modifiedInstructionIndex, instructions)
 }
 
 const run = (instruction, acc, index) => operations[instruction.operation](acc, index, instruction.argument)
