@@ -1,5 +1,6 @@
 import { activeCubesAfterSixCycles, nextState, runCycle } from './day17.js'
 import { dailyInputLines } from '../dailyInput.js'
+import { activeCubesAfterSixCycles4D } from './day17-part2.js'
 
 describe('Day 17: Conway Cubes', () => {
 
@@ -8,7 +9,7 @@ describe('Day 17: Conway Cubes', () => {
     input = [(await dailyInputLines(17)).map(r => r.split(''))]
   })
 
-  describe('Part 1: How many cubes are left in the active state after the sixth cycle?', () => {
+  describe('Part 1 - 3D: How many cubes are left in the active state after the sixth cycle?', () => {
     describe('follos conway rules', () => {
       it('an active cube remains active when 2 or 3 neighbours are active', () => {
         expect(nextState('#', 2)).to.equal('#')
@@ -75,6 +76,22 @@ describe('Day 17: Conway Cubes', () => {
 
     it('solves it', () => {
       expect(activeCubesAfterSixCycles(input)).to.equal(291)
+    })
+  })
+
+  describe('Part 2 - 4D: How many cubes are left in the active state after the sixth cycle?', () => {
+    it('solves example', () => {
+      let state = [[[
+        ['.', '#', '.'],
+        ['.', '.', '#'],
+        ['#', '#', '#']
+      ]]]
+
+      expect(activeCubesAfterSixCycles4D(state)).to.equal(848)
+    })
+
+    it('solves it', () => {
+      expect(activeCubesAfterSixCycles4D(input)).to.equal(1524)
     })
   })
 })

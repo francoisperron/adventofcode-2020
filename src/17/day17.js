@@ -3,7 +3,7 @@ const activeCubesAfterSixCycles = state => {
     state = runCycle(state)
   }
 
-  return state.flat().flat().flat().filter(cube => cube === '#').length
+  return state.flat().flat().filter(cube => cube === '#').length
 }
 
 const runCycle = state => {
@@ -32,17 +32,17 @@ const nextState = (cube, activeNeighbours) => {
 
 const countNeightboutsAt = (state, z, row, col) => {
   const neighbours = [
-    cubeAt(state, z + 1, row - 1, col - 1), cubeAt(state, z + 1, row - 1, col), cubeAt(state, z + 1, row - 1, col + 1),
-    cubeAt(state, z + 1, row, col - 1), cubeAt(state, z + 1, row, col), cubeAt(state, z + 1, row, col + 1),
-    cubeAt(state, z + 1, row + 1, col - 1), cubeAt(state, z + 1, row + 1, col), cubeAt(state, z + 1, row + 1, col + 1),
-    cubeAt(state, z, row - 1, col - 1), cubeAt(state, z, row - 1, col), cubeAt(state, z, row - 1, col + 1),
-    cubeAt(state, z, row, col - 1), cubeAt(state, z, row, col + 1),
-    cubeAt(state, z, row + 1, col - 1), cubeAt(state, z, row + 1, col), cubeAt(state, z, row + 1, col + 1),
-    cubeAt(state, z - 1, row - 1, col - 1), cubeAt(state, z - 1, row - 1, col), cubeAt(state, z - 1, row - 1, col + 1),
-    cubeAt(state, z - 1, row, col - 1), cubeAt(state, z - 1, row, col), cubeAt(state, z - 1, row, col + 1),
-    cubeAt(state, z - 1, row + 1, col - 1), cubeAt(state, z - 1, row + 1, col), cubeAt(state, z - 1, row + 1, col + 1)
+    [1, -1, -1], [1, -1, 0], [1, -1, 1],
+    [1, 0, -1], [1, 0, 0], [1, 0, 1],
+    [1, 1, -1], [1, 1, 0], [1, 1, 1],
+    [0, -1, -1], [0, -1, 0], [0, -1, 1],
+    [0, 0, -1], [0, 0, 1],
+    [0, 1, -1], [0, 1, 0], [0, 1, 1],
+    [-1, -1, -1], [-1, -1, 0], [-1, -1, 1],
+    [-1, 0, -1], [-1, 0, 0], [-1, 0, 1],
+    [-1, 1, -1], [-1, 1, 0], [-1, 1, 1]
   ]
-  return neighbours.filter(n => n === '#').length
+  return neighbours.map(n => cubeAt(state, z + n[0], row + n[1], col + n[2])).filter(n => n === '#').length
 }
 
 const cubeAt = (state, z, row, col) => {
