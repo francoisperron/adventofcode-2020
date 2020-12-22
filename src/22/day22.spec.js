@@ -1,5 +1,5 @@
 import { dailyInput } from '../dailyInput.js'
-import { parseDecks, playRound, winnerScore } from './day22.js'
+import { parseDecks, playRound, winnerScore, winnerScoreRecursive } from './day22.js'
 
 describe('Day 22: Crab Combat', () => {
   const example =
@@ -30,10 +30,10 @@ describe('Day 22: Crab Combat', () => {
 
     it('plays a turn', () => {
       const [deck1, deck2] = parseDecks(example)
-      const [newDeck1, newDeck2] = playRound(deck1, deck2)
+      playRound(deck1, deck2)
 
-      expect(newDeck1).to.eql([2, 6, 3, 1, 9, 5])
-      expect(newDeck2).to.eql([8, 4, 7, 10])
+      expect(deck1).to.eql([2, 6, 3, 1, 9, 5])
+      expect(deck2).to.eql([8, 4, 7, 10])
     })
 
     it('solves example', () => {
@@ -44,6 +44,18 @@ describe('Day 22: Crab Combat', () => {
     it('solves it', () => {
       const [deck1, deck2] = parseDecks(input)
       expect(winnerScore(deck1, deck2)).to.equal(32815)
+    })
+  })
+
+  describe('Part 2: Recursive game', () => {
+    it('solves example', () => {
+      const [deck1, deck2] = parseDecks(example)
+      expect(winnerScoreRecursive(deck1, deck2)).to.equal(291)
+    })
+
+    it('solves it', () => {
+      const [deck1, deck2] = parseDecks(input)
+      expect(winnerScoreRecursive(deck1, deck2)).to.equal(30695)
     })
   })
 })
