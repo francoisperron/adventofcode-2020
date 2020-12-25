@@ -1,5 +1,5 @@
 import { dailyInput } from '../dailyInput.js'
-import { parseTile, part1 } from './day24.js'
+import { nbAdjacent, parseTile, part1 } from './day24.js'
 
 describe('Day 24: Lobby Layout', () => {
 
@@ -57,5 +57,32 @@ describe('Day 24: Lobby Layout', () => {
     it('solves input', () => {
       expect(part1(input)).to.equal(332)
     })
+  })
+
+  describe('Part 2: How many tiles will be black after 100 days?', () => {
+    it('finds adjacent tiles', () => {
+      const tile = { x: 0, y: 0 }
+      const tiles = [
+        { x: 1, y: 0 },
+        { x: -1, y: 0 },
+        { x: -0.5, y: 1 },
+        { x: 0.5, y: 1 },
+        { x: -0.5, y: -1 },
+        { x: 0.5, y: -1 }
+      ]
+      expect(nbAdjacent(tile, tiles)).to.equal(6)
+    })
+
+    // green but too slow
+    // it('solves example', () => {
+    //   expect(part2(example, 1)).to.equal(15)
+    //   expect(part2(example, 2)).to.equal(12)
+    //   expect(part2(example, 3)).to.equal(25)
+    //   expect(part2(example, 100)).to.equal(2208)
+    // })
+    //
+    // it('solves it', () => {
+    //   expect(part2(input, 100)).to.equal(3900)
+    // })
   })
 })
