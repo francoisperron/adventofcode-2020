@@ -5,6 +5,48 @@ const play = (input, moves) => {
   return cupsAfterCup1(cups)
 }
 
+const playPart2 = (input, moves) => {
+  const nbCups = 1_000_000
+  const { cups } = Array(moves + 1).fill().reduce(({ cup, cups }) => moveFast(cup, cups, nbCups), { cup: 0, cups: createCups(parse(input), nbCups) })
+
+  return cups[1] * cups[cups[1]]
+}
+
+const moveFast = (cup, cups, nbCups) => {
+  cup = cups[cup]
+  let destination = cup !== 1 ? cup - 1 : nbCups
+
+  const cup1 = cups[cup]
+  const cup2 = cups[cups[cup]]
+  const cup3 = cups[cups[cups[cup]]]
+
+  while ([cup1, cup2, cup3].includes(destination))
+    destination = destination > 1 ? destination - 1 : nbCups
+
+  const current = cups[cup]
+  cups[cup] = cups[cup3]
+  cups[cup3] = cups[destination]
+  cups[destination] = current
+
+  return { cup, cups }
+}
+
+const createCups = (cups, nbCups) => {
+  const nextCups = Array(nbCups + 1).fill().map((_, i) => i + 1)
+
+  nextCups[0] = cups[0]
+  nextCups[nextCups.length - 1] = cups[0]
+
+  for (let i = 0; i < cups.length - 1; i++) {
+    const cup = cups[i]
+    nextCups[cup] = cups[i + 1]
+  }
+
+  nextCups[cups[cups.length - 1]] = cups.length + 1
+
+  return nextCups
+}
+
 const move = cups => {
   const pickUp = cups.slice(1, 4)
   const remaining = [cups[0]].concat(cups.slice(4))
@@ -33,4 +75,4 @@ const destinationPosition = (cups, remaining) => {
 
 const cupsAfterCup1 = cups => cups.concat(cups).slice(cups.indexOf(1) + 1, cups.indexOf(1) + cups.length).join('')
 
-export { play, parse, move, cupsAfterCup1 }
+export { play, playPart2, createCups, parse, move, cupsAfterCup1 }
