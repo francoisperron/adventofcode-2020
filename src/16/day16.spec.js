@@ -86,8 +86,8 @@ describe('Day 16:  Ticket Translation', () => {
       expect(departureFieldsProduct(example)).to.equal(11 * 12)
     })
 
-    xit('solves it', () => {
-      expect(departureFieldsProduct(input)).to.equal(777)
+    it('solves it', () => {
+      expect(departureFieldsProduct(input)).to.equal(4381476149273)
     })
   })
 })

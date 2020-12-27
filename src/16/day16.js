@@ -1,7 +1,7 @@
 const sumErrors = notes => {
   const { tickets, fields } = parseNotes(notes)
 
-  return invalidFieldValues(tickets, fields).reduce((a, b) => a + b)
+  return findInvalidValues(tickets, fields).reduce((a, b) => a + b)
 }
 
 const parseNotes = notes => {
@@ -21,28 +21,54 @@ const parseFieldsNote = note => note
 
 const parseTicketNote = note => note.split(',').map(Number)
 
-const invalidFieldValues = (tickets, fields) => tickets
+const findInvalidValues = (tickets, fields) => tickets
   .flat()
-  .filter(t => fields.flatMap(field => field.range).every(r => t < r[0] || t > r[1]))
+  .filter(value => fields.every(field => isInvalid(field, value)))
+
+const isInvalid = (field, value) => field.range.every(r => value < r[0] || value > r[1])
 
 // Part 2
 
 const departureFieldsProduct = notes => {
   const { fields, tickets, ticket } = parseNotes(notes)
 
-  // enlever les tickets invalides
-  const invalidValues = invalidFieldValues(tickets, fields)
+  const invalidValues = findInvalidValues(tickets, fields)
   const validTickets = tickets.filter(ticket => !ticket.some(value => invalidValues.includes(value)))
-  // validTickets [ [ 3, 9, 18 ], [ 15, 1, 5 ], [ 5, 14, 9 ] ]
 
-//       'departure class: 0-1 or 4-19\n' +
-//       'departure row: 0-5 or 8-19\n' +
-//       'seat: 0-13 or 16-19\n' +
+  const orderedFields = findFieldsOrder(validTickets, fields)
+  return orderedFields.filter(field => field.name.startsWith('departure')).reduce((product, field) => product * ticket[field.position], 1)
+}
 
-  console.log('validTickets', validTickets)
-  console.log('ticket', ticket)
+const findFieldsOrder = (tickets, fields) => {
+  let fieldsPosition = []
 
-  return ticket[0] * ticket[1]
+  for (let i = 0; i < fields.length; i++) {
+    for (const field of fields) {
+      let valid = true
+      for (const ticket of tickets) {
+        if (isInvalid(field, ticket[i])) {
+          valid = false
+          break
+        }
+      }
+      if (valid) {
+        fieldsPosition.push({ name: field.name, position: i })
+      }
+    }
+  }
+
+  while (fieldsPosition.length > fields.length) {
+    for (let i = 0; i < fields.length; i++) {
+      const fieldAtPosition = fieldsPosition.filter(f => f.position === i)
+
+      if (fieldAtPosition.length === 1) {
+        const foundField = fieldAtPosition[0]
+        fieldsPosition = fieldsPosition.filter(f => f.name === foundField.name ? f.position === foundField.position : true)
+      }
+    }
+  }
+
+  return fieldsPosition
 }
 
 export { parseNotes, sumErrors, departureFieldsProduct }
