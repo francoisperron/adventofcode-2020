@@ -1,3 +1,5 @@
+import { flipHorizontaly, rotateLeft, rotateRight } from './transformations.js'
+
 const part1 = tiles => {
   const fits = tiles.map(t => t.id).reduce((fits, id) => ({ ...fits, [id]: [] }), {})
 
@@ -13,9 +15,20 @@ const part1 = tiles => {
 }
 
 const part2 = () => {
+
+  // DONE // parse calculates 8 possible transformation
+
+  // starting at corner [0][0]
+  // for each row
+  // fill next column
+
   // 1171 [0][0]
   // 1489 [0][1] ==> 1427, 2971 [1][1] && 1427, 2971 [0][2]
   // 2473 [1][0] ==> 1427, 3079 [1][1] && 1427, 3079 [2][0]
+
+  // combine tiles to create photo
+
+  // find monsters
 
   return 273
 }
@@ -30,9 +43,17 @@ const parseTile = input => {
   const edges = [top, bottom, left, right]
   const reverseEdges = edges.map(e => e.split('').reverse().join(''))
 
+  const original = data.map(d => d.split(''))
+  const flipped = flipHorizontaly(original)
+  const transformations = [
+    original, rotateRight(original), rotateRight(rotateRight(original)), rotateLeft(original),
+    flipped, rotateRight(flipped), rotateRight(rotateRight(flipped)), rotateLeft(flipped)
+  ]
+
   return {
     id: parseInt(id.match(/ (\d*):/)[1]),
-    edges: [...edges, ...reverseEdges]
+    edges: [...edges, ...reverseEdges],
+    transformations: transformations
   }
 }
 
